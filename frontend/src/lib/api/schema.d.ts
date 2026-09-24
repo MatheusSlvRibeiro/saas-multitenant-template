@@ -92,10 +92,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/orgs/{org_slug}/members/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
+         *     admin ou owner.
+         */
+        get: operations["orgs_members_list"];
+        put?: never;
+        /**
+         * @description Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
+         *     admin ou owner.
+         */
+        post: operations["orgs_members_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/orgs/{org_slug}/members/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
+         *     admin ou owner.
+         */
+        get: operations["orgs_members_retrieve"];
+        /**
+         * @description Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
+         *     admin ou owner.
+         */
+        put: operations["orgs_members_update"];
+        post?: never;
+        /**
+         * @description Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
+         *     admin ou owner.
+         */
+        delete: operations["orgs_members_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
+         *     admin ou owner.
+         */
+        patch: operations["orgs_members_partial_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        Membership: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly user: components["schemas"]["User"];
+            user_id: number;
+            role?: components["schemas"]["RoleEnum"];
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        PaginatedMembershipList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Membership"][];
+        };
+        PatchedMembership: {
+            /** Format: uuid */
+            readonly id?: string;
+            readonly user?: components["schemas"]["User"];
+            user_id?: number;
+            role?: components["schemas"]["RoleEnum"];
+            /** Format: date-time */
+            readonly created_at?: string;
+        };
+        /**
+         * @description * `owner` - Owner
+         *     * `admin` - Admin
+         *     * `member` - Member
+         * @enum {string}
+         */
+        RoleEnum: "owner" | "admin" | "member";
         TokenObtainPair: {
             username: string;
             password: string;
@@ -222,6 +318,160 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    orgs_members_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMembershipList"];
+                };
+            };
+        };
+    };
+    orgs_members_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Membership"];
+                "application/x-www-form-urlencoded": components["schemas"]["Membership"];
+                "multipart/form-data": components["schemas"]["Membership"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    orgs_members_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    orgs_members_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Membership"];
+                "application/x-www-form-urlencoded": components["schemas"]["Membership"];
+                "multipart/form-data": components["schemas"]["Membership"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    orgs_members_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    orgs_members_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMembership"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMembership"];
+                "multipart/form-data": components["schemas"]["PatchedMembership"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
             };
         };
     };
