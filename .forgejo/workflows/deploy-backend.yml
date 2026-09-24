@@ -1,0 +1,54 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+
+jobs:
+  test:
+    runs-on: docker
+    services:
+      db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.local
+      DJANGO_SECRET_KEY: ci-only-not-for-prod
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.6.9"
+      - run: uv sync --all-extras
+      - run: uv run pytest
+
+  deploy:
+    needs: [test]
+    runs-on: docker
+    steps:
+      # Sem os secrets do Coolify configurados (ex.: template recém-criado, ainda sem
+      # resource no Coolify), o job roda e não faz nada — nunca falha o workflow.
+      - name: Deploy via webhook do Coolify
+        if: ${{ secrets.COOLIFY_URL != '' && secrets.COOLIFY_TOKEN != '' && secrets.BACKEND_APP_UUID != '' }}
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          BACKEND_APP_UUID: ${{ secrets.BACKEND_APP_UUID }}
+        run: |
+          curl -fsS -H "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_URL/api/v1/deploy?uuid=$BACKEND_APP_UUID"

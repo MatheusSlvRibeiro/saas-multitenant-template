@@ -1,0 +1,40 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+
+jobs:
+  test:
+    runs-on: docker
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run test
+      - run: pnpm run build
+
+  deploy:
+    needs: [test]
+    runs-on: docker
+    steps:
+      # Sem os secrets do Coolify configurados (ex.: template recém-criado, ainda sem
+      # resource no Coolify), o job roda e não faz nada — nunca falha o workflow.
+      - name: Deploy via webhook do Coolify
+        if: ${{ secrets.COOLIFY_URL != '' && secrets.COOLIFY_TOKEN != '' && secrets.FRONTEND_APP_UUID != '' }}
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          FRONTEND_APP_UUID: ${{ secrets.FRONTEND_APP_UUID }}
+        run: |
+          curl -fsS -H "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_URL/api/v1/deploy?uuid=$FRONTEND_APP_UUID"
