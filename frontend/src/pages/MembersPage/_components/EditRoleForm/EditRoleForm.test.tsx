@@ -5,9 +5,13 @@ import type { Membership } from '@/lib/services/MembershipService/MembershipServ
 import { EditRoleForm } from './EditRoleForm';
 
 const membership: Membership = {
-    id: '1',
-    user: { id: 1, username: 'alice', email: 'alice@example.com' },
-    user_id: 1,
+    id: 'a2f1e6b2-2b3a-4a5a-9c1a-8f1e0d2b3c4d',
+    user: {
+        id: 'f3a1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
+        username: 'alice',
+        email: 'alice@example.com',
+    },
+    user_id: 'f3a1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
     role: 'member',
     created_at: '2026-01-01T00:00:00Z',
 };

@@ -37,7 +37,7 @@ export function AddMemberForm({ onSubmit, onCancel }: AddMemberFormProps) {
             <Input
                 id="userId"
                 label="ID do usuário"
-                inputMode="numeric"
+                placeholder="00000000-0000-0000-0000-000000000000"
                 invalid={Boolean(errors.userId)}
                 error={errors.userId?.message}
                 {...register('userId')}

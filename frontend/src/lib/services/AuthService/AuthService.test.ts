@@ -36,13 +36,13 @@ describe('AuthService', () => {
 
     it('getMe returns the authenticated user', async () => {
         mock.onGet('/api/auth/me/').reply(200, {
-            id: 1,
+            id: 'f3a1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
             username: 'alice',
             email: 'alice@example.com',
         });
 
         await expect(authService.getMe()).resolves.toEqual({
-            id: 1,
+            id: 'f3a1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
             username: 'alice',
             email: 'alice@example.com',
         });

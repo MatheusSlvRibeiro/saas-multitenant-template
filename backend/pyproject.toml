@@ -26,6 +26,9 @@ dev = [
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Migrations são geradas, não escritas à mão — help_text que o Django copia de
+# AbstractUser (ex. campos de permissão) já vem mais longo que 100 colunas.
+extend-exclude = ["**/migrations/*.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "DJ"]

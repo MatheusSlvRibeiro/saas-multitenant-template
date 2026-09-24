@@ -334,7 +334,8 @@ components:
           - $ref: '#/components/schemas/User'
           readOnly: true
         user_id:
-          type: integer
+          type: string
+          format: uuid
           writeOnly: true
         role:
           $ref: '#/components/schemas/RoleEnum'
@@ -423,7 +424,8 @@ components:
           - $ref: '#/components/schemas/User'
           readOnly: true
         user_id:
-          type: integer
+          type: string
+          format: uuid
           writeOnly: true
         role:
           $ref: '#/components/schemas/RoleEnum'
@@ -476,7 +478,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
           readOnly: true
         username:
           type: string

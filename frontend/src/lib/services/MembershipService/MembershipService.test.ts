@@ -30,14 +30,15 @@ describe('createMembershipService', () => {
 
     it('create POSTs user_id and role to the org-scoped path', async () => {
         const service = createMembershipService('acme');
-        mock.onPost('/api/orgs/acme/members/', { user_id: 7, role: 'member' }).reply(201, {
+        const userId = 'c4b2d3e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e';
+        mock.onPost('/api/orgs/acme/members/', { user_id: userId, role: 'member' }).reply(201, {
             id: '1',
-            user: { id: 7, username: 'bob', email: 'bob@example.com' },
+            user: { id: userId, username: 'bob', email: 'bob@example.com' },
             role: 'member',
             created_at: '2026-01-01T00:00:00Z',
         });
 
-        const created = await service.create({ user_id: 7, role: 'member' });
+        const created = await service.create({ user_id: userId, role: 'member' });
 
         expect(created.id).toBe('1');
     });
@@ -46,7 +47,11 @@ describe('createMembershipService', () => {
         const service = createMembershipService('acme');
         mock.onPatch('/api/orgs/acme/members/1/', { role: 'admin' }).reply(200, {
             id: '1',
-            user: { id: 7, username: 'bob', email: 'bob@example.com' },
+            user: {
+                id: 'c4b2d3e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e',
+                username: 'bob',
+                email: 'bob@example.com',
+            },
             role: 'admin',
             created_at: '2026-01-01T00:00:00Z',
         });

@@ -6,16 +6,24 @@ import { MembersTable } from './MembersTable';
 
 const members: Membership[] = [
     {
-        id: '1',
-        user: { id: 1, username: 'alice', email: 'alice@example.com' },
-        user_id: 1,
+        id: 'a2f1e6b2-2b3a-4a5a-9c1a-8f1e0d2b3c4d',
+        user: {
+            id: 'f3a1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
+            username: 'alice',
+            email: 'alice@example.com',
+        },
+        user_id: 'f3a1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d',
         role: 'admin',
         created_at: '2026-01-01T00:00:00Z',
     },
     {
-        id: '2',
-        user: { id: 2, username: 'bob', email: 'bob@example.com' },
-        user_id: 2,
+        id: 'b3f2e7c3-3c4b-4b6b-8d2b-9f2e1e3c4d5e',
+        user: {
+            id: 'c4b2d3e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e',
+            username: 'bob',
+            email: 'bob@example.com',
+        },
+        user_id: 'c4b2d3e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e',
         role: 'member',
         created_at: '2026-02-01T00:00:00Z',
     },

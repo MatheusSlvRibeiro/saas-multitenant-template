@@ -5,7 +5,7 @@ export type Membership = components['schemas']['Membership'];
 export type MembershipRole = components['schemas']['RoleEnum'];
 
 export interface MembershipCreatePayload {
-    user_id: number;
+    user_id: string;
     role: MembershipRole;
 }
 

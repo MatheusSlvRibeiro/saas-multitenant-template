@@ -177,7 +177,8 @@ export interface components {
             /** Format: uuid */
             readonly id: string;
             readonly user: components["schemas"]["User"];
-            user_id: number;
+            /** Format: uuid */
+            user_id: string;
             role?: components["schemas"]["RoleEnum"];
             /** Format: date-time */
             readonly created_at: string;
@@ -222,7 +223,8 @@ export interface components {
             /** Format: uuid */
             readonly id?: string;
             readonly user?: components["schemas"]["User"];
-            user_id?: number;
+            /** Format: uuid */
+            user_id?: string;
             role?: components["schemas"]["RoleEnum"];
             /** Format: date-time */
             readonly created_at?: string;
@@ -245,7 +247,8 @@ export interface components {
             refresh: string;
         };
         User: {
-            readonly id: number;
+            /** Format: uuid */
+            readonly id: string;
             /** @description Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
             username: string;
             /** Email address */

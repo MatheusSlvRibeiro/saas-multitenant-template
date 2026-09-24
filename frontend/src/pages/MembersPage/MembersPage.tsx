@@ -48,7 +48,7 @@ export function MembersPage() {
     }
 
     const handleAdd = async (formData: AddMemberData) => {
-        await service.create({ user_id: Number(formData.userId), role: formData.role });
+        await service.create({ user_id: formData.userId, role: formData.role });
         setIsAdding(false);
         setRefreshKey((key) => key + 1);
     };

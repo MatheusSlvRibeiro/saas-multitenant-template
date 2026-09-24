@@ -83,6 +83,7 @@ STORAGES = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'accounts.User'
 
 # --- DRF / auth ---------------------------------------------------------
 # JWT via cookie httpOnly em vez de header Bearer: o frontend é sempre a própria SPA
