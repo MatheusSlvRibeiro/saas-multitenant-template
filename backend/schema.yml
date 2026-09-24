@@ -84,6 +84,31 @@ paths:
       responses:
         '200':
           description: No response body
+  /api/organizations/:
+    get:
+      operationId: organizations_list
+      description: |-
+        Organizações das quais o usuário autenticado é membro — é como a SPA monta o
+        seletor de organização depois do login, antes de qualquer endpoint tenant-scoped
+        fazer sentido (ainda não há slug pra resolver).
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - organizations
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganizationList'
+          description: ''
   /api/orgs/{org_slug}/members/:
     get:
       operationId: orgs_members_list
@@ -91,6 +116,12 @@ paths:
         Membros da organização. Listar/ler: qualquer membro. Criar/editar/remover:
         admin ou owner.
       parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
       - in: path
         name: org_slug
         schema:
@@ -102,6 +133,12 @@ paths:
         description: A page number within the paginated result set.
         schema:
           type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       tags:
       - orgs
       security:
@@ -310,6 +347,24 @@ components:
       - id
       - user
       - user_id
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - id
+      - name
+      - slug
     PaginatedMembershipList:
       type: object
       required:
@@ -333,6 +388,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Membership'
+    PaginatedOrganizationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
     PatchedMembership:
       type: object
       properties:

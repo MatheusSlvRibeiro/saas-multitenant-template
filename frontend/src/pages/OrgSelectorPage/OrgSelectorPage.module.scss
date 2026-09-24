@@ -1,0 +1,32 @@
+.selector {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: $spacing-lg;
+
+    &__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+    }
+
+    &__item {
+        width: 100%;
+        text-align: left;
+        padding: $spacing-sm;
+        border-radius: $radius-md;
+        border: 1px solid $color-border;
+        background: $color-white;
+        cursor: pointer;
+        font-size: $font-size-md;
+        transition: border-color $transition-base;
+
+        &:hover {
+            border-color: $color-primary;
+        }
+
+        @include focus-ring;
+    }
+}

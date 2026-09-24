@@ -111,3 +111,33 @@ def test_adding_the_same_user_twice_returns_400_not_500(api_client):
     )
 
     assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_search_filters_members_by_username(api_client):
+    membership = MembershipFactory()
+    api_client.force_authenticate(user=membership.user)
+    MembershipFactory(organization=membership.organization, user__username='alice-carter')
+    MembershipFactory(organization=membership.organization, user__username='bob-nguyen')
+
+    response = api_client.get(
+        f'/api/orgs/{membership.organization.slug}/members/', {'search': 'alice'}
+    )
+
+    usernames = {m['user']['username'] for m in response.json()['results']}
+    assert usernames == {'alice-carter'}
+
+
+@pytest.mark.django_db
+def test_ordering_sorts_members_by_role(api_client):
+    membership = MembershipFactory(role=Membership.Role.OWNER)
+    api_client.force_authenticate(user=membership.user)
+    MembershipFactory(organization=membership.organization, role=Membership.Role.ADMIN)
+    MembershipFactory(organization=membership.organization, role=Membership.Role.MEMBER)
+
+    response = api_client.get(
+        f'/api/orgs/{membership.organization.slug}/members/', {'ordering': 'role'}
+    )
+
+    roles = [m['role'] for m in response.json()['results']]
+    assert roles == sorted(roles)

@@ -92,6 +92,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/organizations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Organizações das quais o usuário autenticado é membro — é como a SPA monta o
+         *     seletor de organização depois do login, antes de qualquer endpoint tenant-scoped
+         *     fazer sentido (ainda não há slug pra resolver).
+         */
+        get: operations["organizations_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/orgs/{org_slug}/members/": {
         parameters: {
             query?: never;
@@ -161,6 +182,12 @@ export interface components {
             /** Format: date-time */
             readonly created_at: string;
         };
+        Organization: {
+            /** Format: uuid */
+            readonly id: string;
+            name: string;
+            slug: string;
+        };
         PaginatedMembershipList: {
             /** @example 123 */
             count: number;
@@ -175,6 +202,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Membership"][];
+        };
+        PaginatedOrganizationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Organization"][];
         };
         PatchedMembership: {
             /** Format: uuid */
@@ -321,11 +363,37 @@ export interface operations {
             };
         };
     };
-    orgs_members_list: {
+    organizations_list: {
         parameters: {
             query?: {
                 /** @description A page number within the paginated result set. */
                 page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedOrganizationList"];
+                };
+            };
+        };
+    };
+    orgs_members_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
             };
             header?: never;
             path: {

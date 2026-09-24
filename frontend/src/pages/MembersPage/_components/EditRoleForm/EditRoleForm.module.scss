@@ -1,0 +1,22 @@
+.form {
+    @include flex-col;
+    gap: $spacing-sm;
+    max-width: 320px;
+
+    &__subject {
+        margin: 0;
+        font-weight: 500;
+        color: $color-text-primary;
+    }
+
+    &__actions {
+        display: flex;
+        gap: $spacing-xs;
+        justify-content: flex-end;
+    }
+
+    &__error {
+        color: $color-error;
+        font-size: $font-size-sm;
+    }
+}

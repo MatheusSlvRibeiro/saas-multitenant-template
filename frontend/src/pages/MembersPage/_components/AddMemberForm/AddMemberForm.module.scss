@@ -1,0 +1,16 @@
+.form {
+    @include flex-col;
+    gap: $spacing-sm;
+    max-width: 320px;
+
+    &__actions {
+        display: flex;
+        gap: $spacing-xs;
+        justify-content: flex-end;
+    }
+
+    &__error {
+        color: $color-error;
+        font-size: $font-size-sm;
+    }
+}

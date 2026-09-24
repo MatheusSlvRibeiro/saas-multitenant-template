@@ -3,9 +3,16 @@ from rest_framework import serializers
 
 from apps.accounts.serializers import UserSerializer
 
-from .models import Membership
+from .models import Membership, Organization
 
 User = get_user_model()
+
+
+class OrganizationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ['id', 'name', 'slug']
+        read_only_fields = ['id']
 
 
 class MembershipSerializer(serializers.ModelSerializer):
