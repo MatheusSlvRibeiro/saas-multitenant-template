@@ -1,5 +1,26 @@
 @mixin truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin focus-ring($color: rgba(37, 99, 235, 0.6)) {
+    &:focus-visible {
+        outline: 2px solid $color;
+        outline-offset: 2px;
+    }
+}
+
+@mixin focus-ring-rounded($color: rgba(37, 99, 235, 0.6)) {
+    border-radius: 50%;
+
+    &:focus-visible {
+        outline: 2px solid $color;
+        outline-offset: 2px;
+    }
 }

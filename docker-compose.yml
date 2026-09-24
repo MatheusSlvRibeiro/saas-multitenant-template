@@ -25,6 +25,9 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
     volumes:
       - ./backend:/app
+      # .venv fica num volume nomeado, não no bind mount: senão o container recria o
+      # venv como root sobre o diretório do host (o builder stage não tem USER não-root).
+      - backend-venv:/app/.venv
     ports:
       - "8000:8000"
     depends_on:
@@ -47,3 +50,4 @@ services:
 volumes:
   db-data:
   frontend-node-modules:
+  backend-venv:

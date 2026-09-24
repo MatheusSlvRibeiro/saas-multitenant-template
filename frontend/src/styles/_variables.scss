@@ -1,5 +1,36 @@
 :root {
-  --color-primary: #2563eb;
-  --color-text: #111827;
-  --color-bg: #ffffff;
+    --color-primary: #2563eb;
+    --color-secondary: #1e293b;
+    --color-text: #111827;
+    --color-text-primary: #111827;
+    --color-text-secondary: #4b5563;
+    --color-text-tertiary: #9ca3af;
+    --color-border: #d1d5db;
+    --color-background: #f3f4f6;
+    --color-bg: #ffffff;
+    --color-white: #ffffff;
+    --color-error: #dc2626;
 }
+
+$color-primary: var(--color-primary);
+$color-secondary: var(--color-secondary);
+$color-text-primary: var(--color-text-primary);
+$color-text-secondary: var(--color-text-secondary);
+$color-text-tertiary: var(--color-text-tertiary);
+$color-border: var(--color-border);
+$color-background: var(--color-background);
+$color-white: var(--color-white);
+$color-error: var(--color-error);
+
+$spacing-xxs: 0.25rem;
+$spacing-xs: 0.5rem;
+$spacing-sm: 0.75rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+
+$font-size-sm: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.25rem;
+
+$radius-md: 6px;
+$transition-base: 150ms ease;

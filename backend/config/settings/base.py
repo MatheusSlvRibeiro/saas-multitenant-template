@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -19,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
     'corsheaders',
     'apps.accounts',
@@ -81,11 +83,18 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# --- DRF ---------------------------------------------------------------
-# Autenticação por cookie httpOnly + JWT (SIMPLE_JWT, cookies, CSRF) chega na Fase 2
-# (backend/jwt-cookie-auth do harness). Fase 1 só fecha o esqueleto e o contrato OpenAPI.
+# --- DRF / auth ---------------------------------------------------------
+# JWT via cookie httpOnly em vez de header Bearer: o frontend é sempre a própria SPA
+# do produto, então cookie httpOnly fecha a superfície de XSS que rouba token de
+# localStorage (ver backend/jwt-cookie-auth do harness).
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'apps.accounts.authentication.CookieJWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -96,5 +105,26 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+AUTH_COOKIE_ACCESS = 'access_token'
+AUTH_COOKIE_REFRESH = 'refresh_token'
+AUTH_COOKIE_SECURE = not DEBUG
+# 'None' só é necessário quando frontend e API vivem em domínios registráveis
+# diferentes de fato; app.x.com e api.x.com são o mesmo site, então 'Lax' já cobre.
+AUTH_COOKIE_SAMESITE = env('COOKIE_SAMESITE', default='Lax')
+COOKIE_DOMAIN = env('COOKIE_DOMAIN', default=None)
+
+CSRF_COOKIE_HTTPONLY = False  # o frontend precisa ler este cookie pra ecoar no header
+CSRF_COOKIE_DOMAIN = env('CSRF_COOKIE_DOMAIN', default=None)
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
+
+# Nunca '*' com auth por cookie: o browser recusa credenciais em origem coringa.
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
 CORS_ALLOW_CREDENTIALS = True

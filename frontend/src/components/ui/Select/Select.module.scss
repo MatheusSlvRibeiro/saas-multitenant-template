@@ -1,0 +1,81 @@
+.select-field {
+    @include flex-col;
+    gap: 0.3rem;
+    align-items: flex-start;
+    width: 100%;
+
+    &__label {
+        color: $color-text-secondary;
+        font-size: $font-size-sm;
+        font-weight: 500;
+
+        &-required {
+            color: $color-error;
+            margin-left: $spacing-xxs;
+        }
+    }
+
+    &__wrapper {
+        position: relative;
+        width: 100%;
+        border-radius: $radius-md;
+        background-color: $color-white;
+        border: 1px solid $color-border;
+        overflow: hidden;
+        transition: border-color $transition-base;
+
+        &:focus-within {
+            border-color: $color-primary;
+        }
+
+        @include focus-ring;
+
+        &--invalid {
+            border-color: $color-error !important;
+
+            &:focus-within {
+                border-color: $color-error !important;
+            }
+        }
+
+        &--disabled {
+            background-color: $color-background;
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+    }
+
+    &__select {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        padding: $spacing-sm;
+        font-size: $font-size-md;
+        color: $color-secondary;
+        appearance: none;
+        position: relative;
+        z-index: 10;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    &__chevron {
+        position: absolute;
+        top: 50%;
+        right: $spacing-sm;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: $color-text-secondary;
+        z-index: 20;
+    }
+
+    &__error {
+        color: $color-error;
+        font-size: $font-size-sm;
+        min-height: 0.75rem;
+    }
+}

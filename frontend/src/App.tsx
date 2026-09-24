@@ -1,12 +1,13 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { HealthPage } from '@/routes/HealthPage';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from '@/context/authContext';
+import AppRoutes from '@/routes';
 
 export function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HealthPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <AppRoutes />
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
