@@ -1,0 +1,7 @@
+openapi: 3.0.3
+info:
+  title: SaaS Multi-tenant Template API
+  version: 1.0.0
+  description: Contrato gerado a partir das views DRF. Nunca edite schema.yml manualmente.
+paths: {}
+components: {}

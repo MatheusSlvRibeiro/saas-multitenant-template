@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^backend/
+      - id: ruff-format
+        files: ^backend/
+
+  - repo: local
+    hooks:
+      # Único gerenciador de hooks do monorepo (ver README "Hooks locais") — chama
+      # lint-staged do frontend em vez de instalar Husky, que disputaria .git/hooks
+      # com o pre-commit framework.
+      - id: frontend-lint-staged
+        name: frontend lint-staged
+        entry: pnpm --dir frontend exec lint-staged
+        language: system
+        pass_filenames: false
+        files: ^frontend/
+
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.16.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ["@commitlint/config-conventional"]
